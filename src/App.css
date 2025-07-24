@@ -28,7 +28,6 @@
   transform: translateX(-50%);
   width: 100%;
   max-width: 560px;
-  margin: 0 8px;
   z-index: 100;
 }
 

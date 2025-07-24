@@ -103,8 +103,8 @@ const HomeTab = () => {
             style={{
               background: "#f6f8f6",
               borderRadius: 16,
-              height: 300,
               width: "100%",
+              aspectRatio: "3 / 4",
               boxSizing: "border-box",
               boxShadow: "0 2px 8px rgba(60,165,92,0.08)",
               cursor: "pointer",
@@ -112,7 +112,7 @@ const HomeTab = () => {
               flexDirection: "column",
               justifyContent: "flex-start",
               alignItems: "center",
-              fontSize: 18,
+              fontSize: "clamp(13px, 3vw, 16px)",
               fontWeight: 500,
               transition: "box-shadow 0.2s",
               padding: 0,
@@ -191,17 +191,20 @@ const HomeTab = () => {
                 textAlign: "left",
               }}
             >
-              <p style={{ margin: 0 }}>{item.date}</p>
+              <p style={{ margin: 0, fontSize: "clamp(12px, 2.5vw, 15px)" }}>
+                {item.date}
+              </p>
             </div>
           </div>
         ))}
         {/* grid의 마지막 row에 2개 배너 */}
         <div
           style={{
-            background: "linear-gradient(90deg, #f3e8ff 0%, #e0f2fe 100%)",
+            background: "#fff",
+            border: "2px solid #a8e063",
             borderRadius: 24,
             boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
-            padding: 24,
+            padding: 16,
             minHeight: 140,
             display: "flex",
             flexDirection: "column",
@@ -210,10 +213,22 @@ const HomeTab = () => {
             gap: 12,
           }}
         >
-          <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4 }}>
+          <div
+            style={{
+              fontWeight: 700,
+              fontSize: "clamp(14px, 4vw, 20px)",
+              marginBottom: 4,
+            }}
+          >
             god의 예측
           </div>
-          <div style={{ color: "#666", fontSize: 15, marginBottom: 12 }}>
+          <div
+            style={{
+              color: "#666",
+              fontSize: "clamp(12px, 3vw, 15px)",
+              marginBottom: 12,
+            }}
+          >
             AI로 내 아기의 모습을 예측해보세요!
           </div>
           {/* Fetal Vision 배너 버튼/상태 */}
@@ -230,15 +245,17 @@ const HomeTab = () => {
               width: "100%",
               boxSizing: "border-box",
               padding: "10px 24px",
-              borderRadius: 999,
-              border: "1.5px solid #bdbdfc",
-              background: "#f5f6ff",
-              color: "#5a5ad6",
+              borderRadius: 12,
+              border: "1.5px solid #a8e063",
+              background: "#fff",
+              color: "#056c22",
               fontWeight: 700,
-              fontSize: 16,
+              fontSize: "clamp(12px, 3.5vw, 15px)",
               boxShadow: "0 2px 8px rgba(90,90,214,0.06)",
               cursor: fvState === "generating" ? "default" : "pointer",
               opacity: fvState === "generating" ? 0.7 : 1,
+              whiteSpace: "normal",
+              wordBreak: "keep-all",
             }}
           >
             {fvState === "idle" && "지금 내 아이의 모습은?"}
@@ -248,10 +265,11 @@ const HomeTab = () => {
         </div>
         <div
           style={{
-            background: "linear-gradient(90deg, #e0eafc 0%, #e0f2fe 100%)",
+            background:
+              "linear-gradient(135deg, #f8ffe8 0%, #a8e063 50%, #056c22 100%)",
             borderRadius: 24,
             boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
-            padding: 24,
+            padding: 16,
             minHeight: 140,
             display: "flex",
             flexDirection: "column",
@@ -260,10 +278,22 @@ const HomeTab = () => {
             gap: 12,
           }}
         >
-          <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4 }}>
+          <div
+            style={{
+              fontWeight: 700,
+              fontSize: "clamp(14px, 4vw, 20px)",
+              marginBottom: 4,
+            }}
+          >
             3D 영상 변환기
           </div>
-          <div style={{ color: "#666", fontSize: 15, marginBottom: 12 }}>
+          <div
+            style={{
+              color: "#666",
+              fontSize: "clamp(12px, 3vw, 15px)",
+              marginBottom: 12,
+            }}
+          >
             내 아기의 모습을 3D 영상으로 확인해보세요!
           </div>
           {/* 3D Fetal Vision 배너 버튼/상태 */}
@@ -280,15 +310,17 @@ const HomeTab = () => {
               width: "100%",
               boxSizing: "border-box",
               padding: "10px 24px",
-              borderRadius: 999,
-              border: "1.5px solid #bdbdfc",
-              background: "#f5f6ff",
-              color: "#5a5ad6",
+              borderRadius: 12,
+              border: "1.5px solid #a8e063",
+              background: "#fff",
+              color: "#056c22",
               fontWeight: 700,
-              fontSize: 16,
+              fontSize: "clamp(12px, 3.5vw, 15px)",
               boxShadow: "0 2px 8px rgba(90,90,214,0.06)",
               cursor: fv3dState === "generating" ? "default" : "pointer",
               opacity: fv3dState === "generating" ? 0.7 : 1,
+              whiteSpace: "normal",
+              wordBreak: "keep-all",
             }}
           >
             {fv3dState === "idle" && "요리보고 저리보고"}
