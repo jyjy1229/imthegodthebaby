@@ -27,3 +27,15 @@ code {
 .chip-scroll {
   scrollbar-width: none; /* Firefox */
 }
+
+.comment-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+.comment-scrollbar::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+.comment-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}

@@ -86,7 +86,7 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
       setLoading(false);
     };
     fetchPosts();
-  }, [refreshCommunity, forceRefresh]);
+  }, [refreshCommunity, forceRefresh, guest_id]);
 
   // 댓글 목록 불러오기
   const fetchComments = async (postId: string) => {
@@ -391,39 +391,59 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
                         maxHeight: 180,
                         overflowY: "auto",
                         marginBottom: 8,
+                        scrollbarWidth: "thin", // Firefox
+                        msOverflowStyle: "none", // IE/Edge
                       }}
+                      className="comment-scrollbar"
                     >
                       {(comments[post.id] || []).map((c) => (
                         <div
                           key={c.id}
-                          style={{ marginBottom: 8, fontSize: 15 }}
+                          style={{
+                            marginBottom: 8,
+                            fontSize: 15,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
                         >
-                          <span
+                          <div
                             style={{
-                              fontWeight: 600,
-                              color:
-                                c.guest_id === guest_id ? "#3CA55C" : undefined,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
                             }}
                           >
-                            {c.nickname}
-                          </span>
+                            <span
+                              style={{
+                                fontWeight: 600,
+                                color:
+                                  c.guest_id === guest_id
+                                    ? "#3CA55C"
+                                    : undefined,
+                              }}
+                            >
+                              {c.nickname}
+                            </span>
+                            <span
+                              style={{
+                                color: "#aaa",
+                                fontSize: 12,
+                              }}
+                            >
+                              {c.content}
+                            </span>
+                          </div>
                           <span
                             style={{
                               color: "#bbb",
                               fontSize: 12,
-                              marginLeft: 6,
+                              marginLeft: 12,
+                              marginRight: 4,
+                              whiteSpace: "nowrap",
                             }}
                           >
                             {timeAgo(c.created_at)}
-                          </span>
-                          <span
-                            style={{
-                              color: "#aaa",
-                              fontSize: 12,
-                              marginLeft: 8,
-                            }}
-                          >
-                            {c.content}
                           </span>
                         </div>
                       ))}
