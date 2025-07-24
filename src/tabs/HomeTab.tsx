@@ -4,27 +4,27 @@ const items = [
   {
     id: 1,
     thumb: require("../assets/thumbnail_3.png"),
-    date: "2024년06월01일 촬영본",
+    date: "2024년 6월 1일 촬영본",
   },
   {
     id: 2,
     thumb: require("../assets/thumbnail_7.png"),
-    date: "2024년06월02일 촬영본",
+    date: "2024년 6월 20일 촬영본",
   },
   {
     id: 3,
     thumb: require("../assets/thumbnail_9.png"),
-    date: "2024년06월03일 촬영본",
+    date: "2024년 7월 13일 촬영본",
   },
   {
     id: 4,
     thumb: require("../assets/thumbnail_10.png"),
-    date: "2024년06월04일 촬영본",
+    date: "2024년 7월 30일 촬영본",
   },
   {
     id: 5,
     thumb: require("../assets/thumbnail_13.png"),
-    date: "2024년06월05일 촬영본",
+    date: "2024년 08월 15일 촬영본",
   },
 ];
 
@@ -60,7 +60,7 @@ const HomeTab = () => {
             style={{
               background: "#f6f8f6",
               borderRadius: 16,
-              height: 350,
+              height: 300,
               width: "100%",
               boxSizing: "border-box",
               boxShadow: "0 2px 8px rgba(60,165,92,0.08)",
