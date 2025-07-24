@@ -132,8 +132,8 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
           background: "#fff",
           borderRadius: 24,
           padding: 20, // 기존 32에서 20으로 변경
-          minWidth: 400, // 기존 320에서 400으로 변경
-          maxWidth: 520, // 기존 400에서 520으로 변경
+          minWidth: 320, // 기존 320에서 400으로 변경
+          maxWidth: 480, // 기존 400에서 520으로 변경
           display: "flex",
           flexDirection: "column",
           gap: 16,
@@ -203,6 +203,7 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
                     width: 20,
                     height: 20,
                     fontSize: 13,
+                    color: "white",
                     cursor: "pointer",
                     lineHeight: 1,
                     padding: 0,
@@ -226,6 +227,7 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
               fontSize: 14,
               width: "100%",
               flex: 1,
+              color: "white",
               height: 40,
             }}
             disabled={loading}
