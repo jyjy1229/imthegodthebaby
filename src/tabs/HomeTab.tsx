@@ -381,6 +381,7 @@ const HomeTab = () => {
         <video
           src="/fetal_3d_demo.mp4"
           controls
+          playsInline
           muted
           style={{
             width: 320,
