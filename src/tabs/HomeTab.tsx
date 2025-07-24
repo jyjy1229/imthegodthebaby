@@ -92,7 +92,7 @@ const HomeTab = () => {
           margin: "0 auto",
           padding: "0 16px",
           alignItems: "start",
-          maxWidth: 600,
+          maxWidth: 560,
         }}
       >
         {items.map((item) => (
@@ -148,15 +148,15 @@ const HomeTab = () => {
                   position: "absolute",
                   right: 8,
                   bottom: 8,
-                  background: "rgba(255,255,255,0.85)",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: 32,
-                  height: 32,
+                  background: "#fff",
+                  border: "2px solid #3CA55C",
+                  borderRadius: 24,
+                  width: 40,
+                  height: 40,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
                   cursor: "pointer",
                   padding: 0,
                 }}
@@ -200,7 +200,7 @@ const HomeTab = () => {
         <div
           style={{
             background: "#fff",
-            border: "2px solid #a8e063",
+            border: "2px solid #3CA55C",
             borderRadius: 24,
             boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
             padding: 16,
@@ -245,7 +245,7 @@ const HomeTab = () => {
               boxSizing: "border-box",
               padding: "10px 24px",
               borderRadius: 12,
-              border: "1.5px solid #a8e063",
+              border: "1.5px solid #3CA55C",
               background: "#fff",
               color: "#056c22",
               fontWeight: 700,
@@ -310,7 +310,7 @@ const HomeTab = () => {
               boxSizing: "border-box",
               padding: "10px 24px",
               borderRadius: 12,
-              border: "1.5px solid #a8e063",
+              border: "1.5px solid #3CA55C",
               background: "#fff",
               color: "#056c22",
               fontWeight: 700,

@@ -143,54 +143,65 @@ function App() {
           style={{ height: 32, marginLeft: 8, marginTop: 8, marginBottom: 8 }}
         />
       </header>
-      <div className="main-content">
+      <div className="main-content" style={{ position: "relative" }}>
         {selected === 0 && <HomeTab />}
         {selected === 1 && <DiaryTab />}
         {selected === 2 && <CommunityTab refreshCommunity={refreshCommunity} />}
         {selected === 3 && <ProfileTab />}
-      </div>
-      {/* 커뮤니티 탭일 때만 하단 고정 플로팅 버튼 */}
-      {selected === 2 && (
-        <button
-          style={{
-            position: "fixed",
-            left: "50%",
-            bottom: 80, // tab bar 위에 띄우기 (tab bar 높이+여유)
-            transform: "translateX(130px)",
-            display: "flex",
-            alignItems: "center",
-            background: "#22c55e",
-            color: "white",
-            border: "none",
-            borderRadius: 999,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-            padding: "12px 24px 12px 16px",
-            fontSize: 18,
-            fontWeight: 600,
-            cursor: "pointer",
-            zIndex: 2000,
-            gap: 10,
-          }}
-          onClick={() => setShowWriteModal(true)}
-        >
-          {/* 연필 SVG 아이콘 */}
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ marginRight: 8 }}
+        {/* 커뮤니티 탭일 때만 하단 고정 플로팅 버튼 */}
+        {selected === 2 && (
+          <div
+            style={{
+              position: "fixed",
+              left: 0,
+              right: 0,
+              bottom: 80,
+              width: "100%",
+              maxWidth: 560,
+              margin: "0 auto",
+              display: "flex",
+              justifyContent: "flex-end",
+              zIndex: 2000,
+              paddingRight: 24, // 우측 여백 추가
+            }}
           >
-            <path d="M12 20h9" />
-            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-          </svg>
-          글쓰기
-        </button>
-      )}
+            <button
+              style={{
+                background: "#3CA55C",
+                color: "white",
+                border: "2px solid #3CA55C",
+                borderRadius: 24,
+                padding: "8px 16px 8px 12px", // 기존보다 작게
+                fontSize: 16, // 기존 18 → 16
+                fontWeight: 600,
+                cursor: "pointer",
+                gap: 8, // 기존 10 → 8
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={() => setShowWriteModal(true)}
+              disabled={showWriteModal}
+            >
+              {/* 연필 SVG 아이콘 */}
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ marginRight: 6 }}
+              >
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+              </svg>
+              글쓰기
+            </button>
+          </div>
+        )}
+      </div>
       {/* 글쓰기 모달 */}
       <WritePostModal
         open={showWriteModal}

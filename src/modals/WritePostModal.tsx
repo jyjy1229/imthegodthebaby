@@ -130,11 +130,10 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
       <div
         style={{
           background: "#fff",
-          borderRadius: 16,
-          padding: 32,
-          minWidth: 320,
-          maxWidth: 400,
-          boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
+          borderRadius: 24,
+          padding: 20, // 기존 32에서 20으로 변경
+          minWidth: 400, // 기존 320에서 400으로 변경
+          maxWidth: 520, // 기존 400에서 520으로 변경
           display: "flex",
           flexDirection: "column",
           gap: 16,
@@ -142,7 +141,7 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
       >
         <h3 style={{ margin: 0 }}>글쓰기</h3>
         <textarea
-          placeholder="내용을 입력하세요"
+          placeholder="내 아이의 상태를 공유해주세요"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={5}
@@ -152,6 +151,8 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
             border: "1px solid #ddd",
             fontSize: 16,
             resize: "none",
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
           }}
         />
         {/* 이미지 첨부 */}
@@ -213,15 +214,19 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
             ))}
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "row", gap: 6 }}>
           <button
             onClick={onClose}
             style={{
-              padding: "8px 16px",
-              borderRadius: 8,
+              padding: "6px 0",
+              borderRadius: 12,
+              cursor: "pointer",
               border: "none",
               background: "#eee",
-              fontSize: 16,
+              fontSize: 14,
+              width: "100%",
+              flex: 1,
+              height: 40,
             }}
             disabled={loading}
           >
@@ -230,13 +235,17 @@ const WritePostModal: React.FC<WritePostModalProps> = ({
           <button
             onClick={handleSubmit}
             style={{
-              padding: "8px 16px",
-              borderRadius: 8,
+              padding: "6px 0",
+              borderRadius: 12,
+              cursor: "pointer",
               border: "none",
-              background: "#22c55e",
+              background: "#3CA55C",
               color: "white",
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: 600,
+              width: "100%",
+              flex: 1,
+              height: 40,
             }}
             disabled={loading || !content.trim()}
           >

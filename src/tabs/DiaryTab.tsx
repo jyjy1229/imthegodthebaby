@@ -161,7 +161,7 @@ const DiaryTab = () => {
         position: "relative",
         minHeight: "80vh",
         width: "100%",
-        maxWidth: 800,
+        maxWidth: 560,
         margin: "0 auto",
       }}
     >
@@ -185,7 +185,7 @@ const DiaryTab = () => {
                 borderRadius: 20,
                 border:
                   tab.key === selectedTab
-                    ? "2px solid #a8e063"
+                    ? "2px solid #3CA55C"
                     : "1px solid #ccc",
                 background: "#fff",
                 color: tab.key === selectedTab ? "#222" : "#333",
@@ -203,7 +203,6 @@ const DiaryTab = () => {
           <div
             style={{
               background: "#fff",
-              border: "2px solid #a8e063",
               borderRadius: 24,
               boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
               padding: 16,
@@ -220,7 +219,7 @@ const DiaryTab = () => {
             <div
               style={{
                 color: "#fff",
-                background: "#a8e063",
+                background: "#3CA55C",
                 borderRadius: 16,
                 padding: "6px 16px",
                 fontWeight: 600,
@@ -282,7 +281,6 @@ const DiaryTab = () => {
         <div
           style={{
             background: "#fff",
-            border: "2px solid #a8e063",
             borderRadius: 24,
             boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
             padding: 16,
@@ -299,7 +297,7 @@ const DiaryTab = () => {
           <div
             style={{
               color: "#fff",
-              background: "#a8e063",
+              background: "#3CA55C",
               borderRadius: 16,
               padding: "6px 16px",
               fontWeight: 600,

@@ -5,11 +5,32 @@ interface CommunityTabProps {
   refreshCommunity?: number;
 }
 
+interface Comment {
+  id: string;
+  post_id: string;
+  guest_id: string;
+  nickname: string;
+  content: string;
+  created_at: string;
+}
+
 const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<{ [id: string]: boolean }>({});
+  const [showComments, setShowComments] = useState<{ [id: string]: boolean }>(
+    {}
+  );
+  const [comments, setComments] = useState<{ [id: string]: Comment[] }>({});
+  const [commentInputs, setCommentInputs] = useState<{ [id: string]: string }>(
+    {}
+  );
+  const [commentCounts, setCommentCounts] = useState<{ [id: string]: number }>(
+    {}
+  );
   const [forceRefresh] = useState(0);
+  const guest_id = localStorage.getItem("guest_id") || "";
+  const nickname = localStorage.getItem("nickname") || "익명";
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,13 +40,81 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
         .from("posts")
         .select("id, nickname, content, created_at, image_urls")
         .order("created_at", { ascending: false });
+      if (!error && data) {
+        // 각 게시글의 좋아요 수와 내가 누른 여부 조회
+        const postIds = data.map((p: any) => p.id);
+        let likesMap: Record<string, number> = {};
+        let likedMap: Record<string, boolean> = {};
+        let commentCountMap: Record<string, number> = {};
+        if (postIds.length > 0) {
+          // 좋아요 수
+          const { data: likesData } = await supabase
+            .from("likes")
+            .select("post_id, guest_id");
+          if (likesData) {
+            postIds.forEach((id: string) => {
+              likesMap[id] = likesData.filter(
+                (l: any) => l.post_id === id
+              ).length;
+              likedMap[id] = likesData.some(
+                (l: any) => l.post_id === id && l.guest_id === guest_id
+              );
+            });
+          }
+          // 댓글 개수
+          const { data: commentsData } = await supabase
+            .from("comments")
+            .select("post_id");
+          if (commentsData) {
+            commentsData.forEach((c: any) => {
+              commentCountMap[c.post_id] =
+                (commentCountMap[c.post_id] || 0) + 1;
+            });
+          }
+        }
+        setCommentCounts(commentCountMap);
+        setPosts(
+          data.map((p: any) => ({
+            ...p,
+            likesCount: likesMap[p.id] || 0,
+            likedByMe: likedMap[p.id] || false,
+          }))
+        );
+      }
       const elapsed = Date.now() - start;
       await new Promise((res) => setTimeout(res, Math.max(0, 1000 - elapsed)));
-      if (!error && data) setPosts(data);
       setLoading(false);
     };
     fetchPosts();
   }, [refreshCommunity, forceRefresh]);
+
+  // 댓글 목록 불러오기
+  const fetchComments = async (postId: string) => {
+    const { data } = await supabase
+      .from("comments")
+      .select("id, post_id, guest_id, nickname, content, created_at")
+      .eq("post_id", postId)
+      .order("created_at", { ascending: true });
+    setComments((prev) => ({ ...prev, [postId]: data || [] }));
+  };
+
+  // 댓글 등록
+  const handleAddComment = async (postId: string) => {
+    const content = commentInputs[postId]?.trim();
+    if (!content) return;
+    await supabase.from("comments").insert({
+      post_id: postId,
+      guest_id,
+      nickname,
+      content,
+    });
+    setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
+    fetchComments(postId);
+    setCommentCounts((prev) => ({
+      ...prev,
+      [postId]: (prev[postId] || 0) + 1,
+    }));
+  };
 
   // 시간 표시 함수
   const timeAgo = (dateStr: string) => {
@@ -38,6 +127,30 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
     return `${Math.floor(diff / 86400)}일 전`;
   };
 
+  // 좋아요 토글
+  const handleLike = async (post: any) => {
+    if (!guest_id) return;
+    if (post.likedByMe) {
+      await supabase
+        .from("likes")
+        .delete()
+        .match({ post_id: post.id, guest_id });
+    } else {
+      await supabase.from("likes").insert({ post_id: post.id, guest_id });
+    }
+    setPosts((prev) =>
+      prev.map((p) =>
+        p.id === post.id
+          ? {
+              ...p,
+              likesCount: p.likedByMe ? p.likesCount - 1 : p.likesCount + 1,
+              likedByMe: !p.likedByMe,
+            }
+          : p
+      )
+    );
+  };
+
   return (
     <div
       style={{
@@ -46,7 +159,7 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
         position: "relative",
         minHeight: "80vh",
         width: "100%",
-        maxWidth: 800,
+        maxWidth: 560,
         margin: "0 auto",
       }}
     >
@@ -123,7 +236,13 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
                       background: "#eee",
                     }}
                   />
-                  <span style={{ fontWeight: 700, fontSize: 16 }}>
+                  <span
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 16,
+                      color: post.guest_id === guest_id ? "#3CA55C" : undefined,
+                    }}
+                  >
                     {post.nickname}
                   </span>
                   <span style={{ color: "#888", fontSize: 13, marginLeft: 8 }}>
@@ -218,17 +337,19 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
                     style={{
                       background: "none",
                       border: "none",
-                      color: "#888",
+                      color: post.likedByMe ? "#e74c3c" : "#888",
                       display: "flex",
                       alignItems: "center",
                       gap: 4,
                       cursor: "pointer",
+                      fontSize: 16,
                     }}
+                    onClick={() => handleLike(post)}
                   >
                     <span role="img" aria-label="like">
-                      👍
-                    </span>{" "}
-                    좋아요
+                      {post.likedByMe ? "❤️" : "🤍"}
+                    </span>
+                    {post.likesCount}
                   </button>
                   <button
                     style={{
@@ -239,15 +360,152 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
                       alignItems: "center",
                       gap: 4,
                       cursor: "pointer",
+                      fontSize: 16,
+                    }}
+                    onClick={() => {
+                      setShowComments((prev) => {
+                        const next = { ...prev, [post.id]: !prev[post.id] };
+                        if (!prev[post.id]) fetchComments(post.id);
+                        return next;
+                      });
                     }}
                   >
                     <span role="img" aria-label="comment">
                       💬
-                    </span>{" "}
-                    댓글 쓰기
+                    </span>
+                    {commentCounts[post.id] || 0}
                   </button>
-                  <span style={{ marginLeft: "auto" }}>조회 0</span>
                 </div>
+                {/* 댓글 목록 및 입력창 */}
+                {showComments[post.id] && (
+                  <div
+                    style={{
+                      marginTop: 12,
+                      background: "#fafafa",
+                      borderRadius: 12,
+                      padding: 12,
+                    }}
+                  >
+                    <div
+                      style={{
+                        maxHeight: 180,
+                        overflowY: "auto",
+                        marginBottom: 8,
+                      }}
+                    >
+                      {(comments[post.id] || []).map((c) => (
+                        <div
+                          key={c.id}
+                          style={{ marginBottom: 8, fontSize: 15 }}
+                        >
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color:
+                                c.guest_id === guest_id ? "#3CA55C" : undefined,
+                            }}
+                          >
+                            {c.nickname}
+                          </span>
+                          <span
+                            style={{
+                              color: "#bbb",
+                              fontSize: 12,
+                              marginLeft: 6,
+                            }}
+                          >
+                            {timeAgo(c.created_at)}
+                          </span>
+                          <span
+                            style={{
+                              color: "#aaa",
+                              fontSize: 12,
+                              marginLeft: 8,
+                            }}
+                          >
+                            {c.content}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 6,
+                        flexDirection: "column",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color:
+                            localStorage.getItem("guest_id") === guest_id
+                              ? "#3CA55C"
+                              : undefined,
+                          fontWeight: 600,
+                          marginBottom: 2,
+                        }}
+                      >
+                        {nickname}
+                      </div>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input
+                          type="text"
+                          placeholder="댓글을 입력하세요"
+                          value={commentInputs[post.id] || ""}
+                          onChange={(e) =>
+                            setCommentInputs((prev) => ({
+                              ...prev,
+                              [post.id]: e.target.value,
+                            }))
+                          }
+                          style={{
+                            flex: 1,
+                            borderRadius: 8,
+                            border: "1px solid #ddd",
+                            padding: "6px 12px",
+                            fontSize: 15,
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleAddComment(post.id);
+                          }}
+                        />
+                        <button
+                          onClick={() => handleAddComment(post.id)}
+                          style={{
+                            background: "#fff",
+                            border: "1.5px solid #3CA55C",
+                            borderRadius: "50%",
+                            width: 36,
+                            height: 36,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: 0,
+                            cursor: "pointer",
+                            boxShadow: "0 2px 8px rgba(60,165,92,0.08)",
+                            transition: "box-shadow 0.15s",
+                          }}
+                          disabled={!commentInputs[post.id]?.trim()}
+                        >
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#3CA55C"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M12 19V5" />
+                            <polyline points="5 12 12 5 19 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </li>
             );
           })}

@@ -9,13 +9,15 @@ const ProfileTab = () => {
   return (
     <div
       style={{
-        width: 400,
-        maxWidth: "100%",
-        margin: "40px 0 0 0",
+        boxSizing: "border-box",
         padding: 24,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
+        position: "relative",
+        width: "calc(100% - 48px)",
+        maxWidth: 560,
+        margin: "0 auto",
+        background: "#fff",
+        borderRadius: 24,
+        boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
       }}
     >
       <div
