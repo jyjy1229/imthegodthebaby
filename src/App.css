@@ -14,14 +14,15 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #fff;
+  min-height: unset;
+  height: 48px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: flex-start;
+  padding: 0 16px;
+  font-size: 16px;
+  color: #222;
 }
 
 .App-link {
@@ -55,7 +56,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding-bottom: 80px; /* 탭바 공간 확보 */
 }
 
@@ -94,10 +95,13 @@
   font-weight: bold;
 }
 
-/* 민트~코발트 계열 그라데이션 포인트 컬러 */
+/* 숲 느낌의 초록 계열 그라데이션 포인트 컬러 */
 .point-gradient {
-  background: linear-gradient(90deg, #3fffd8 0%, #1e90ff 100%);
-  color: #fff;
+  background: linear-gradient(90deg, #3ca55c 0%, #b5ac49 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
 .point-text {
