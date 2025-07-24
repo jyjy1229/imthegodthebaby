@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import WritePostModal from "../WritePostModal";
 
 const items = [
   {
@@ -30,6 +31,8 @@ const items = [
 
 const HomeTab = () => {
   const [openId, setOpenId] = useState<number | null>(null);
+  const [showWriteModal, setShowWriteModal] = useState(false);
+  const [modalImage, setModalImage] = useState<string | null>(null);
   const handleOpen = (id: number) => setOpenId(id);
   const handleClose = () => setOpenId(null);
 
@@ -83,6 +86,7 @@ const HomeTab = () => {
                 background: "#e0e0e0",
                 margin: 0,
                 padding: 0,
+                position: "relative",
               }}
             >
               <img
@@ -95,6 +99,45 @@ const HomeTab = () => {
                   display: "block",
                 }}
               />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalImage(item.thumb);
+                  setShowWriteModal(true);
+                }}
+                style={{
+                  position: "absolute",
+                  right: 8,
+                  bottom: 8,
+                  background: "rgba(255,255,255,0.85)",
+                  border: "none",
+                  borderRadius: "50%",
+                  width: 32,
+                  height: 32,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+                  cursor: "pointer",
+                  padding: 0,
+                }}
+                aria-label="공유하기"
+              >
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#3CA55C"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                  <line x1="12" y1="15" x2="12" y2="4" />
+                  <polyline points="8 8 12 4 16 8" />
+                </svg>
+              </button>
             </div>
             <div
               style={{
@@ -174,6 +217,12 @@ const HomeTab = () => {
           </div>
         </div>
       )}
+      {/* 공유하기 글쓰기 모달 */}
+      <WritePostModal
+        open={showWriteModal}
+        onClose={() => setShowWriteModal(false)}
+        defaultImages={modalImage ? [modalImage] : []}
+      />
     </div>
   );
 };

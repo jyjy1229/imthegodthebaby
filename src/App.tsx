@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import HomeTab from "./tabs/HomeTab";
 import DiaryTab from "./tabs/DiaryTab";
 import CommunityTab from "./tabs/CommunityTab";
 import ProfileTab from "./tabs/ProfileTab";
+import WritePostModal from "./WritePostModal";
 
 // 샘플 SVG 아이콘 컴포넌트 정의
 const HomeIcon = () => (
@@ -97,29 +98,108 @@ const tabs = [
 
 function App() {
   const [selected, setSelected] = useState(0);
+  const [showWriteModal, setShowWriteModal] = useState(false);
+  const [refreshCommunity, setRefreshCommunity] = useState(0);
+
+  // 최초 1회 guest_id, nickname 저장
+  useEffect(() => {
+    if (!localStorage.getItem("guest_id")) {
+      localStorage.setItem("guest_id", crypto.randomUUID());
+    }
+    if (!localStorage.getItem("nickname")) {
+      const taemyeongList = [
+        "콩콩이",
+        "튼튼이",
+        "깜찍이",
+        "복덩이",
+        "사랑이",
+        "보물이",
+        "쑥쑥이",
+        "달콩이",
+        "별이",
+        "해님이",
+        "다복이",
+        "행운이",
+        "기쁨이",
+        "반짝이",
+        "햇살이",
+        "꽃님이",
+        "하늘이",
+        "미소",
+        "초롱이",
+        "맑음이",
+      ];
+      const idx = Math.floor(Math.random() * taemyeongList.length);
+      localStorage.setItem("nickname", taemyeongList[idx]);
+    }
+  }, []);
 
   return (
     <div className="app-root">
       <header className="App-header">
-        <div
-          className="logo-text point-gradient"
-          style={{
-            fontWeight: 700,
-            fontSize: 24,
-            marginLeft: 8,
-            marginTop: 8,
-            marginBottom: 8,
-          }}
-        >
-          god난아기
-        </div>
+        <img
+          src={require("./assets/long_logo.png")}
+          alt="logo"
+          style={{ height: 32, marginLeft: 8, marginTop: 8, marginBottom: 8 }}
+        />
       </header>
       <div className="main-content">
         {selected === 0 && <HomeTab />}
         {selected === 1 && <DiaryTab />}
-        {selected === 2 && <CommunityTab />}
+        {selected === 2 && <CommunityTab refreshCommunity={refreshCommunity} />}
         {selected === 3 && <ProfileTab />}
       </div>
+      {/* 커뮤니티 탭일 때만 하단 고정 플로팅 버튼 */}
+      {selected === 2 && (
+        <button
+          style={{
+            position: "fixed",
+            left: "50%",
+            bottom: 80, // tab bar 위에 띄우기 (tab bar 높이+여유)
+            transform: "translateX(130px)",
+            display: "flex",
+            alignItems: "center",
+            background: "#22c55e",
+            color: "white",
+            border: "none",
+            borderRadius: 999,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+            padding: "12px 24px 12px 16px",
+            fontSize: 18,
+            fontWeight: 600,
+            cursor: "pointer",
+            zIndex: 2000,
+            gap: 10,
+          }}
+          onClick={() => setShowWriteModal(true)}
+        >
+          {/* 연필 SVG 아이콘 */}
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ marginRight: 8 }}
+          >
+            <path d="M12 20h9" />
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+          </svg>
+          글쓰기
+        </button>
+      )}
+      {/* 글쓰기 모달 */}
+      <WritePostModal
+        open={showWriteModal}
+        onClose={() => setShowWriteModal(false)}
+        onSubmit={() => {
+          setShowWriteModal(false);
+          setRefreshCommunity((v) => v + 1);
+        }}
+      />
       <nav className="tab-bar">
         {tabs.map((tab, idx) => (
           <button
