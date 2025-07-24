@@ -13,3 +13,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.chip-scroll::-webkit-scrollbar {
+  display: none;
+}
+.chip-scroll::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 4px;
+}
+.chip-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chip-scroll {
+  scrollbar-width: none; /* Firefox */
+}
