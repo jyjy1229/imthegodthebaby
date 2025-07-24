@@ -1,7 +1,6 @@
 import { useState } from "react";
 import WritePostModal from "../modals/WritePostModal";
 import thumb13 from "../assets/thumbnail_13.png";
-import fetal3dVideo from "../assets/fetal_3d_demo.mp4";
 import UltrasoundResultModal from "../modals/UltrasoundResultModal";
 
 const items = [
@@ -380,7 +379,7 @@ const HomeTab = () => {
         width={400}
       >
         <video
-          src={fetal3dVideo}
+          src="/fetal_3d_demo.mp4"
           controls
           style={{
             width: 320,
