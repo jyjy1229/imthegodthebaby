@@ -36,3 +36,85 @@
     transform: rotate(360deg);
   }
 }
+
+/* 화이트 테마 배경 및 전체 폰트 색상 */
+.app-root {
+  min-height: 100vh;
+  background: #fff;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 630px;
+  margin: 0 auto;
+  box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.04);
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 80px; /* 탭바 공간 확보 */
+}
+
+.tab-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: 630px;
+  height: 64px;
+  background: #fff;
+  display: flex;
+  border-top: 1px solid #e0e0e0;
+  z-index: 100;
+  box-shadow: 0 -2px 8px 0 rgba(0, 0, 0, 0.03);
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  cursor: pointer;
+  outline: none;
+}
+
+.tab-btn.selected {
+  color: #111;
+  font-weight: bold;
+}
+
+/* 민트~코발트 계열 그라데이션 포인트 컬러 */
+.point-gradient {
+  background: linear-gradient(90deg, #3fffd8 0%, #1e90ff 100%);
+  color: #fff;
+}
+
+.point-text {
+  background: linear-gradient(90deg, #3fffd8 0%, #1e90ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+/* 기존 .point-btn, .point-btn:hover 제거 */
+
+.tab-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.tab-label {
+  font-size: 12px;
+}
