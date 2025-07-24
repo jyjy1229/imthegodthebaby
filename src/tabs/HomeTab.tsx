@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import WritePostModal from "../WritePostModal";
+import { useState } from "react";
+import WritePostModal from "../modals/WritePostModal";
+import thumb13 from "../assets/thumbnail_13.png";
+import fetal3dVideo from "../assets/fetal_3d_demo.mp4";
+import UltrasoundResultModal from "../modals/UltrasoundResultModal";
 
 const items = [
   {
@@ -22,17 +25,53 @@ const items = [
     thumb: require("../assets/thumbnail_10.png"),
     date: "2024년 7월 30일 촬영본",
   },
-  {
-    id: 5,
-    thumb: require("../assets/thumbnail_13.png"),
-    date: "2024년 08월 15일 촬영본",
-  },
 ];
 
 const HomeTab = () => {
   const [openId, setOpenId] = useState<number | null>(null);
   const [showWriteModal, setShowWriteModal] = useState(false);
   const [modalImage, setModalImage] = useState<string | null>(null);
+  // Fetal Vision/3D Fetal Vision demo 상태 (localStorage 연동 제거)
+  const [fvState, setFvState] = useState<"idle" | "generating" | "done">(
+    "idle"
+  );
+  const [fvTime, setFvTime] = useState(3);
+  const [fv3dState, setFv3dState] = useState<"idle" | "generating" | "done">(
+    "idle"
+  );
+  const [fv3dTime, setFv3dTime] = useState(3);
+  const [showFetalModal, setShowFetalModal] = useState(false);
+  const [showFetal3dModal, setShowFetal3dModal] = useState(false);
+
+  // Fetal Vision 생성하기 클릭
+  const handleFvGenerate = () => {
+    setFvState("generating");
+    setFvTime(3);
+    let t = 3;
+    const interval = setInterval(() => {
+      t--;
+      setFvTime(t);
+      if (t === 0) {
+        clearInterval(interval);
+        setFvState("done");
+      }
+    }, 1000);
+  };
+  // 3D Fetal Vision 생성하기 클릭
+  const handleFv3dGenerate = () => {
+    setFv3dState("generating");
+    setFv3dTime(3);
+    let t = 3;
+    const interval = setInterval(() => {
+      t--;
+      setFv3dTime(t);
+      if (t === 0) {
+        clearInterval(interval);
+        setFv3dState("done");
+      }
+    }, 1000);
+  };
+
   const handleOpen = (id: number) => setOpenId(id);
   const handleClose = () => setOpenId(null);
 
@@ -54,6 +93,7 @@ const HomeTab = () => {
           margin: "0 auto",
           padding: "0 16px",
           alignItems: "start",
+          maxWidth: 600,
         }}
       >
         {items.map((item) => (
@@ -155,74 +195,169 @@ const HomeTab = () => {
             </div>
           </div>
         ))}
-      </div>
-      {/* 팝업(모달) */}
-      {openId !== null && (
+        {/* grid의 마지막 row에 2개 배너 */}
         <div
           style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0,0,0,0.3)",
+            background: "linear-gradient(90deg, #f3e8ff 0%, #e0f2fe 100%)",
+            borderRadius: 24,
+            boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
+            padding: 24,
+            minHeight: 140,
             display: "flex",
-            alignItems: "center",
+            flexDirection: "column",
+            alignItems: "flex-start",
             justifyContent: "center",
-            zIndex: 1000,
+            gap: 12,
           }}
-          onClick={handleClose}
         >
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 16,
-              padding: 32,
-              minWidth: 260,
-              boxShadow: "0 4px 24px rgba(60,165,92,0.15)",
-              position: "relative",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={handleClose}
-              style={{
-                position: "absolute",
-                top: 12,
-                right: 12,
-                background: "none",
-                border: "none",
-                fontSize: 20,
-                cursor: "pointer",
-                color: "#3CA55C",
-              }}
-              aria-label="닫기"
-            >
-              ×
-            </button>
-            <h3 style={{ marginBottom: 12 }}>썸네일</h3>
-            <img
-              src={items.find((i) => i.id === openId)?.thumb}
-              alt="썸네일"
-              style={{
-                width: 200,
-                height: 200,
-                objectFit: "cover",
-                borderRadius: 12,
-              }}
-            />
-            <p style={{ marginTop: 16 }}>
-              {items.find((i) => i.id === openId)?.date}
-            </p>
+          <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4 }}>
+            god의 예측
           </div>
+          <div style={{ color: "#666", fontSize: 15, marginBottom: 12 }}>
+            AI로 내 아기의 모습을 예측해보세요!
+          </div>
+          {/* Fetal Vision 배너 버튼/상태 */}
+          <button
+            onClick={
+              fvState === "idle"
+                ? handleFvGenerate
+                : fvState === "done"
+                ? () => setShowFetalModal(true)
+                : undefined
+            }
+            disabled={fvState === "generating"}
+            style={{
+              width: "100%",
+              boxSizing: "border-box",
+              padding: "10px 24px",
+              borderRadius: 999,
+              border: "1.5px solid #bdbdfc",
+              background: "#f5f6ff",
+              color: "#5a5ad6",
+              fontWeight: 700,
+              fontSize: 16,
+              boxShadow: "0 2px 8px rgba(90,90,214,0.06)",
+              cursor: fvState === "generating" ? "default" : "pointer",
+              opacity: fvState === "generating" ? 0.7 : 1,
+            }}
+          >
+            {fvState === "idle" && "지금 내 아이의 모습은?"}
+            {fvState === "generating" && `AI 생성 중... (${fvTime}초 남음)`}
+            {fvState === "done" && "확인하기"}
+          </button>
         </div>
-      )}
+        <div
+          style={{
+            background: "linear-gradient(90deg, #e0eafc 0%, #e0f2fe 100%)",
+            borderRadius: 24,
+            boxShadow: "0 4px 24px rgba(60,165,92,0.10)",
+            padding: 24,
+            minHeight: 140,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            gap: 12,
+          }}
+        >
+          <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4 }}>
+            3D 영상 변환기
+          </div>
+          <div style={{ color: "#666", fontSize: 15, marginBottom: 12 }}>
+            내 아기의 모습을 3D 영상으로 확인해보세요!
+          </div>
+          {/* 3D Fetal Vision 배너 버튼/상태 */}
+          <button
+            onClick={
+              fv3dState === "idle"
+                ? handleFv3dGenerate
+                : fv3dState === "done"
+                ? () => setShowFetal3dModal(true)
+                : undefined
+            }
+            disabled={fv3dState === "generating"}
+            style={{
+              width: "100%",
+              boxSizing: "border-box",
+              padding: "10px 24px",
+              borderRadius: 999,
+              border: "1.5px solid #bdbdfc",
+              background: "#f5f6ff",
+              color: "#5a5ad6",
+              fontWeight: 700,
+              fontSize: 16,
+              boxShadow: "0 2px 8px rgba(90,90,214,0.06)",
+              cursor: fv3dState === "generating" ? "default" : "pointer",
+              opacity: fv3dState === "generating" ? 0.7 : 1,
+            }}
+          >
+            {fv3dState === "idle" && "요리보고 저리보고"}
+            {fv3dState === "generating" && `AI 생성 중... (${fv3dTime}초 남음)`}
+            {fv3dState === "done" && "확인하기"}
+          </button>
+        </div>
+      </div>
+      {/* 팝업(모달) */}
+      <UltrasoundResultModal open={openId !== null} onClose={handleClose}>
+        <img
+          src={
+            openId !== null
+              ? items.find((i) => i.id === openId)?.thumb
+              : undefined
+          }
+          alt="아기 썸네일"
+          style={{
+            width: 240,
+            height: 240,
+            objectFit: "cover",
+            borderRadius: 16,
+            display: "block",
+            margin: "0 auto",
+          }}
+        />
+      </UltrasoundResultModal>
       {/* 공유하기 글쓰기 모달 */}
       <WritePostModal
         open={showWriteModal}
         onClose={() => setShowWriteModal(false)}
         defaultImages={modalImage ? [modalImage] : []}
       />
+      {/* Fetal Vision 모달 */}
+      <UltrasoundResultModal
+        open={showFetalModal}
+        onClose={() => setShowFetalModal(false)}
+        width={400}
+      >
+        <img
+          src={thumb13}
+          alt="아기 썸네일"
+          style={{
+            width: 240,
+            height: 240,
+            objectFit: "cover",
+            borderRadius: 16,
+            display: "block",
+            margin: "0 auto",
+          }}
+        />
+      </UltrasoundResultModal>
+      {/* 3D Fetal Vision 모달 */}
+      <UltrasoundResultModal
+        open={showFetal3dModal}
+        onClose={() => setShowFetal3dModal(false)}
+        width={400}
+      >
+        <video
+          src={fetal3dVideo}
+          controls
+          style={{
+            width: 320,
+            borderRadius: 16,
+            display: "block",
+            margin: "0 auto",
+          }}
+        />
+      </UltrasoundResultModal>
     </div>
   );
 };

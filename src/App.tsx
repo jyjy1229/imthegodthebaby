@@ -4,7 +4,7 @@ import HomeTab from "./tabs/HomeTab";
 import DiaryTab from "./tabs/DiaryTab";
 import CommunityTab from "./tabs/CommunityTab";
 import ProfileTab from "./tabs/ProfileTab";
-import WritePostModal from "./WritePostModal";
+import WritePostModal from "./modals/WritePostModal";
 
 // 샘플 SVG 아이콘 컴포넌트 정의
 const HomeIcon = () => (
