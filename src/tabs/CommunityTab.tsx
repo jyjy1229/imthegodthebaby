@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
+import UltrasoundResultModal from "../modals/UltrasoundResultModal";
 
 interface CommunityTabProps {
   refreshCommunity?: number;
@@ -31,6 +32,8 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
   const [forceRefresh] = useState(0);
   const guest_id = localStorage.getItem("guest_id") || "";
   const nickname = localStorage.getItem("nickname") || "익명";
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [modalImage, setModalImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -279,6 +282,11 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
                               borderRadius: 8,
                               objectFit: "cover",
                               border: "1px solid #eee",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setModalImage(url);
+                              setShowImageModal(true);
                             }}
                           />
                         ))}
@@ -531,6 +539,25 @@ const CommunityTab: React.FC<CommunityTabProps> = ({ refreshCommunity }) => {
           })}
         </ul>
       )}
+      {/* 이미지 클릭 시 결과 모달 */}
+      <UltrasoundResultModal
+        open={showImageModal}
+        onClose={() => setShowImageModal(false)}
+      >
+        {modalImage && (
+          <img
+            src={modalImage}
+            alt="확대 이미지"
+            style={{
+              width: 320,
+              maxWidth: "90vw",
+              borderRadius: 16,
+              display: "block",
+              margin: "0 auto",
+            }}
+          />
+        )}
+      </UltrasoundResultModal>
     </div>
   );
 };

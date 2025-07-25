@@ -130,7 +130,8 @@ function App() {
         "맑음이",
       ];
       const idx = Math.floor(Math.random() * taemyeongList.length);
-      localStorage.setItem("nickname", taemyeongList[idx]);
+      const randomNum = Math.floor(100 + Math.random() * 900); // 100~999
+      localStorage.setItem("nickname", taemyeongList[idx] + randomNum);
     }
   }, []);
 
@@ -161,7 +162,7 @@ function App() {
               margin: "0 auto",
               display: "flex",
               justifyContent: "flex-end",
-              zIndex: 2000,
+              zIndex: 999,
               paddingRight: 24, // 우측 여백 추가
             }}
           >
